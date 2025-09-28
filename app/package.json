@@ -1,1 +1,13 @@
-{"name":"simple-app","version":"1.0.0","main":"index.js","scripts":{"start":"node index.js"},"dependencies":{"express":"^4.21.2"}}
+{
+  "name": "simple-app",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "build": "mkdir -p docs && cp index.js docs/",
+    "deploy": "npm run build && git add docs && git commit -m 'Deploy' || echo 'No changes' && git push"
+  },
+  "dependencies": {
+    "express": "^4.21.2"
+  }
+}
