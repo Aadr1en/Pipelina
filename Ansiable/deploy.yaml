@@ -1,0 +1,26 @@
+- name: Déployer application sur Kubernetes via manifests
+  hosts: localhost
+  connection: local
+  gather_facts: no
+
+  vars:
+    image: "adren493/simple-app:latest"   # ton image Docker Hub
+
+  tasks:
+    - name: Installer collection kubernetes.core (si besoin)
+      ansible.builtin.command: >
+        ansible-galaxy collection install kubernetes.core
+      changed_when: false
+      check_mode: no
+
+    - name: Appliquer le deployment (template local)
+      kubernetes.core.k8s:
+        state: present
+        definition: "{{ lookup('template', '../k8s/deployment.yaml') | from_yaml }}"
+      vars:
+        IMAGE: "{{ image }}"
+
+    - name: Appliquer le service
+      kubernetes.core.k8s:
+        state: present
+        src: ../k8s/service.yaml
